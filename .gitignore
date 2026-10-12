@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+.env
+.env.*
+!.env.example
+coverage/
+*.log
+frontend/dist/
+frontend/node_modules/
+backend/node_modules/
+backend/uploads/
+frontend/.vite/
+backend/.jest-cache/

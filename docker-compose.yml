@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: alesun_fund
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    image: node:20
+    working_dir: /app/backend
+    command: sh -c "npm install && npm run prisma:generate && npm run prisma:push && npm run seed && npm run start"
+    environment:
+      PORT: 4000
+      JWT_SECRET: change-me
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/alesun_fund
+      UPLOAD_DIR: ./uploads
+    volumes:
+      - .:/app
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+
+  frontend:
+    image: node:20
+    working_dir: /app/frontend
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    environment:
+      VITE_API_URL: http://localhost:4000/api
+    volumes:
+      - .:/app
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

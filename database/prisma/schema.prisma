@@ -1,0 +1,191 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  APPLICANT
+  ADMIN
+  CREDIT_OFFICER
+  FIELD_OFFICER
+}
+
+enum ApplicationStatus {
+  NEW
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum ApplicationSource {
+  PUBLIC
+  INTERNAL
+}
+
+enum LoanStatus {
+  ACTIVE
+  COMPLETED
+  DEFAULTED
+}
+
+enum LoanOutcome {
+  PERFECT
+  LATE
+  DEFAULT
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  PAID_LATE
+  LATE
+  DEFAULTED
+}
+
+model User {
+  id                   String              @id @default(uuid())
+  fullName             String
+  email                String              @unique
+  passwordHash         String
+  role                 Role
+  isActive             Boolean             @default(true)
+  score                Int                 @default(100)
+  maxLoanLimit         Decimal             @default(100000) @db.Decimal(14, 2)
+  totalLoansTaken      Int                 @default(0)
+  totalLoansCompleted  Int                 @default(0)
+  lastLoanStatus       LoanOutcome?
+  applications         LoanApplication[]   @relation("submittedApplications")
+  assignedApplications LoanApplication[]   @relation("assignedFieldOfficer")
+  verificationReports  VerificationReport[]
+  auditLogs            AuditLog[]
+  loans                Loan[]
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+}
+
+model Business {
+  id                    String            @id @default(uuid())
+  name                  String
+  industry              String
+  location              String            @default("")
+  yearsInOperation      Decimal           @db.Decimal(6, 2)
+  ownerName             String
+  ownerPhone            String
+  idNumber              String            @default("")
+  ownerReliabilityScore Int
+  averageMonthlyRevenue Decimal           @db.Decimal(14, 2)
+  applications          LoanApplication[]
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+}
+
+model LoanApplication {
+  id                String               @id @default(uuid())
+  businessId        String
+  submittedById     String?
+  fieldOfficerId    String?
+  source            ApplicationSource @default(INTERNAL)
+  status            ApplicationStatus
+  monthlyRevenue    Json
+  monthlyExpenses   Json?
+  expenses          Decimal              @db.Decimal(14, 2)
+  financialInfo     Json
+  documentPaths     Json
+  screeningIssues   Json
+  fraudFlags        Json              @default("[]")
+  decisionNotes     String?
+  passportPhotoUrl  String?
+  idFrontUrl        String?
+  idBackUrl         String?
+  termsAccepted     Boolean           @default(false)
+  termsAcceptedAt   DateTime?
+  paymentProofUrl   String?
+  hasPaidFee        Boolean           @default(false)
+  hasPaidFeeAt      DateTime?
+  loanRequestAmount Decimal              @db.Decimal(14, 2)
+  loanPurpose       String
+  submittedAt       DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  business          Business             @relation(fields: [businessId], references: [id])
+  submittedBy       User?                @relation("submittedApplications", fields: [submittedById], references: [id])
+  fieldOfficer      User?                @relation("assignedFieldOfficer", fields: [fieldOfficerId], references: [id])
+  riskScore         RiskScore?
+  verificationReports VerificationReport[]
+  loan              Loan?
+}
+
+model RiskScore {
+  id             String          @id @default(uuid())
+  applicationId  String          @unique
+  score          Decimal         @db.Decimal(5, 2)
+  label          String
+  recommendation String
+  breakdown      Json
+  createdAt      DateTime        @default(now())
+  application    LoanApplication @relation(fields: [applicationId], references: [id])
+}
+
+model Loan {
+  id                 String          @id @default(uuid())
+  applicationId      String          @unique
+  userId             String?
+  principal          Decimal         @db.Decimal(14, 2)
+  annualInterestRate Decimal         @db.Decimal(5, 2)
+  termMonths         Int
+  startDate          DateTime?
+  dueDate            DateTime?
+  fullyPaid          Boolean         @default(false)
+  daysLate           Int             @default(0)
+  status             LoanStatus
+  disbursedAt        DateTime?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  application        LoanApplication @relation(fields: [applicationId], references: [id])
+  user               User?           @relation(fields: [userId], references: [id])
+  payments           Payment[]
+}
+
+model Payment {
+  id                String        @id @default(uuid())
+  loanId            String
+  installmentNumber Int
+  dueDate           DateTime
+  amountDue         Decimal       @db.Decimal(14, 2)
+  amountPaid        Decimal?      @db.Decimal(14, 2)
+  paidDate          DateTime?
+  status            PaymentStatus
+  lateDays          Int           @default(0)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  loan              Loan          @relation(fields: [loanId], references: [id])
+}
+
+model VerificationReport {
+  id                       String          @id @default(uuid())
+  applicationId            String
+  officerId                String
+  businessExists           Boolean
+  stockMatchesClaims       Boolean
+  customerActivityVerified Boolean
+  ownerInterviewNotes      String
+  attachments              Json
+  createdAt                DateTime        @default(now())
+  updatedAt                DateTime        @updatedAt
+  application              LoanApplication @relation(fields: [applicationId], references: [id])
+  officer                  User            @relation(fields: [officerId], references: [id])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  action     String
+  entityType String
+  entityId   String
+  metadata   Json?
+  createdAt  DateTime @default(now())
+  user       User?    @relation(fields: [userId], references: [id])
+}

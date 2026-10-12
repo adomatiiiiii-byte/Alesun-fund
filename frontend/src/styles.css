@@ -1,0 +1,2315 @@
+:root {
+  font-family: "Instrument Sans", sans-serif;
+  color: #10243e;
+  background:
+    radial-gradient(circle at top left, rgba(248, 198, 90, 0.45), transparent 24%),
+    linear-gradient(180deg, #f7f1df 0%, #edf3f8 100%);
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: none;
+  border-radius: 14px;
+  padding: 0.9rem 1.1rem;
+  background: #0b6a70;
+  color: white;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.85rem 0.9rem;
+  border-radius: 14px;
+  border: 1px solid #bfd0dc;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.shell {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  padding: 1.25rem 2rem;
+  background: rgba(14, 39, 52, 0.96);
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 12px 28px rgba(16, 36, 62, 0.18);
+}
+
+.brandBlock h1 {
+  margin: 0.2rem 0 0;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.nav a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+}
+
+.nav a.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.content {
+  padding: 2rem;
+}
+
+.adminContent {
+  padding-top: 1.5rem;
+}
+
+.card,
+.metricCard,
+.userCard {
+  border-radius: 24px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 40px rgba(16, 36, 62, 0.08);
+}
+
+.card,
+.metricCard {
+  background: rgba(255, 255, 255, 0.82);
+  padding: 1.4rem;
+}
+
+.userCard {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  display: grid;
+  gap: 0.4rem;
+}
+
+.topbarUserCard {
+  grid-auto-flow: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+}
+
+.topbarUserCard > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.stack {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.applicationsPage {
+  gap: 1rem;
+}
+
+.applicationsTopSection {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.compact {
+  gap: 0.9rem;
+}
+
+.pageHeader,
+.loanRow,
+.listItem,
+.barRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.headerMeta {
+  margin: 0.4rem 0 0;
+  color: #49627c;
+}
+
+.metricsGrid,
+.splitGrid,
+.kanban,
+.filterGrid,
+.workflowLayout {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.metricsGrid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.splitGrid {
+  grid-template-columns: minmax(320px, 420px) 1fr;
+}
+
+.workflowLayout {
+  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  align-items: start;
+}
+
+.filterGrid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.formGrid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.kanban {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.kanbanWide {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.kanbanColumn {
+  background: #eef5f8;
+  border-radius: 18px;
+  padding: 1rem;
+  min-height: 320px;
+}
+
+.kanbanCard,
+.listItem,
+.loanRow {
+  display: block;
+  padding: 0.95rem;
+  border-radius: 16px;
+  background: white;
+  margin-top: 0.8rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: #d9ebf4;
+}
+
+.badge-approved,
+.badge-low-risk,
+.badge-paid,
+.badge-verified {
+  background: #d2f1dd;
+  color: #155534;
+}
+
+.badge-under-review,
+.badge-warning,
+.badge-medium-risk,
+.badge-late,
+.badge-paid-late,
+.badge-incomplete {
+  background: #fff1ce;
+  color: #8c5b00;
+}
+
+.badge-rejected,
+.badge-high-risk,
+.badge-defaulted {
+  background: #f8d4d4;
+  color: #812020;
+}
+
+.badge-on-track,
+.badge-eligible {
+  background: #d2f1dd;
+  color: #155534;
+}
+
+.badge-due-soon,
+.badge-average,
+.badge-pending {
+  background: #fff1ce;
+  color: #8c5b00;
+}
+
+.badge-needs-improvement,
+.badge-not-eligible,
+.badge-no-active-loan {
+  background: #f8d4d4;
+  color: #812020;
+}
+
+.loanActions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.loanBorrowerFacts {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.loanBorrowerFacts p {
+  margin: 0;
+  line-height: 1.35;
+}
+
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.barTrack {
+  flex: 1;
+  background: #dce8ee;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.barFill {
+  height: 12px;
+  background: linear-gradient(90deg, #0b6a70, #f0b64c);
+}
+
+.authPage {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.authPage-admin {
+  background:
+    radial-gradient(circle at top left, rgba(49, 106, 148, 0.26), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(240, 182, 76, 0.22), transparent 24%),
+    linear-gradient(180deg, #081722 0%, #12293a 54%, #edf3f8 54.1%, #edf3f8 100%);
+}
+
+.authPage-staff {
+  background:
+    radial-gradient(circle at top left, rgba(248, 198, 90, 0.35), transparent 24%),
+    linear-gradient(180deg, #f7f1df 0%, #edf3f8 100%);
+}
+
+.authPortalShell {
+  width: min(1100px, 100%);
+  display: grid;
+  grid-template-columns: minmax(280px, 1.15fr) minmax(320px, 460px);
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.authPortalIntro {
+  display: grid;
+  gap: 1rem;
+  padding: 2rem;
+  color: white;
+  align-content: center;
+}
+
+.authPortalIntro h1,
+.authPortalIntro p {
+  margin: 0;
+}
+
+.authPortalStatGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.9rem;
+}
+
+.authPortalStatCard {
+  display: grid;
+  gap: 0.3rem;
+  padding: 1rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.authPortalStatCard strong {
+  font-size: 1.15rem;
+}
+
+.authPortalStatCard span {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.authPortalNote {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem 1.1rem;
+  border-radius: 18px;
+  background: rgba(9, 26, 38, 0.44);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.authPortalNote p,
+.authPortalNote strong {
+  margin: 0;
+}
+
+.authCard {
+  width: min(480px, 100%);
+}
+
+.authPortalForm {
+  width: 100%;
+  align-self: center;
+  padding: 1.8rem;
+}
+
+.authCardHeader {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.authCardHeader h2,
+.authCardHeader p {
+  margin: 0;
+}
+
+.authPortalSwitch {
+  margin: 0;
+  color: #49627c;
+}
+
+.authPortalSwitch a {
+  color: #0b6a70;
+  font-weight: 600;
+}
+
+.authModeRow {
+  gap: 0.6rem;
+}
+
+.authModeButton {
+  background: #eef4f7;
+  color: #49627c;
+  border: 1px solid #d7e4eb;
+}
+
+.authModeButton.active {
+  background: #0b6a70;
+  color: white;
+  border-color: #0b6a70;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  opacity: 0.72;
+  margin: 0;
+}
+
+.errorText {
+  color: #a12626;
+}
+
+.infoText {
+  color: #0b6a70;
+}
+
+.warningText {
+  color: #8c5b00;
+}
+
+.feeNotice {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1rem 1.1rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fff3cc 0%, #ffe4aa 100%);
+  border: 1px solid #f0c567;
+  color: #6b4700;
+}
+
+.feeNotice p {
+  margin: 0;
+}
+
+.ghostButton {
+  background: transparent;
+  border: 1px solid #bfd0dc;
+  color: #0e2734;
+}
+
+.buttonLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 14px;
+  padding: 0.9rem 1.1rem;
+  background: #0b6a70;
+  color: white;
+}
+
+.fieldLabel {
+  display: grid;
+  gap: 0.5rem;
+  color: #49627c;
+}
+
+.checkboxField {
+  gap: 0;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  color: #10243e;
+}
+
+.checkboxLabel input {
+  width: auto;
+  margin-top: 0.2rem;
+}
+
+.fieldLabelError {
+  color: #a12626;
+}
+
+.fieldLabelError input,
+.fieldLabelError textarea,
+.fieldLabelError select {
+  border: 2px solid #c63a3a !important;
+  background: #ffe5e5 !important;
+  box-shadow: 0 0 0 3px rgba(198, 58, 58, 0.24) !important;
+}
+
+.uploadCard {
+  padding: 1rem;
+  border: 1px solid #d7e4eb;
+  border-radius: 18px;
+  background: rgba(248, 251, 253, 0.95);
+}
+
+.uploadGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.uploadPreview {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1px solid #d7e4eb;
+}
+
+.fileSuccessCard {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 14px;
+  background: #eef8f2;
+  border: 1px solid #cde8d7;
+  color: #155534;
+}
+
+.fileHint {
+  font-size: 0.9rem;
+  color: #6a7f92;
+}
+
+.fieldGroup {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.revenueGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+
+.publicShell {
+  min-height: 100vh;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.publicHero {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.publicSubmissionPane {
+  max-height: calc(100vh - 14rem);
+  overflow-y: auto;
+  padding-right: 0.35rem;
+}
+
+.progressRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.progressStep {
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: #e7edf2;
+  color: #49627c;
+}
+
+.progressStep.active {
+  background: #d2f1dd;
+  color: #155534;
+}
+
+.sectionToggle {
+  width: 100%;
+  min-height: 58px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sectionToggle::after {
+  content: "+";
+  font-size: 1.2rem;
+}
+
+.sectionToggle.open::after {
+  content: "-";
+}
+
+.topGap {
+  margin-top: 1rem;
+}
+
+.applicationList {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.applicationListItem {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.sectionDescription {
+  margin: 0.75rem 0 0;
+  color: #5b7085;
+}
+
+.applicationHighlight {
+  width: 100%;
+  background: white;
+  color: #10243e;
+  border: 1px solid #d7e4eb;
+  display: grid;
+  gap: 0.35rem;
+  text-align: left;
+}
+
+.applicationHighlight.active {
+  border-color: #0b6a70;
+  box-shadow: 0 0 0 2px rgba(11, 106, 112, 0.12);
+}
+
+.insetCard {
+  background: #f8fbfd;
+  box-shadow: none;
+}
+
+.inlineDetails {
+  margin-left: 0.25rem;
+}
+
+.plainList {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.toggle {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.toggle input {
+  width: auto;
+}
+
+.termsRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  color: #10243e;
+}
+
+.termsRow input {
+  width: auto;
+  margin-top: 0.15rem;
+}
+
+.inlineLinkButton {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #0b6a70;
+  text-decoration: underline;
+  display: inline;
+  border-radius: 0;
+}
+
+.termsPanel {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #d7e4eb;
+  border-radius: 20px;
+  background: rgba(248, 251, 253, 0.98);
+}
+
+.termsScroll {
+  max-height: 320px;
+  overflow-y: auto;
+  display: grid;
+  gap: 1rem;
+  padding-right: 0.35rem;
+}
+
+.termsActions {
+  display: grid;
+  justify-content: end;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.statusTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.workflowRailTabs {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.statusTabGroup {
+  display: grid;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.statusTab {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.82);
+  color: #10243e;
+  border: 1px solid #d7e4eb;
+}
+
+.statusTab.active {
+  border-color: #0b6a70;
+  box-shadow: 0 0 0 2px rgba(11, 106, 112, 0.12);
+}
+
+.statusQueuePanel {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  border-radius: 18px;
+  background: rgba(248, 251, 253, 0.96);
+  border: 1px solid #d7e4eb;
+}
+
+.statusQueuePanelOverlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 0.5rem);
+  z-index: 15;
+  max-height: min(70vh, 860px);
+  box-shadow: 0 18px 40px rgba(16, 36, 62, 0.14);
+}
+
+.workflowListCard,
+.workflowDetailCard {
+  min-height: 640px;
+}
+
+.workflowRail,
+.workflowWorkspace {
+  min-height: calc(100vh - 11rem);
+}
+
+.workflowRail {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  position: sticky;
+  top: 6.5rem;
+}
+
+.queueHeader {
+  align-items: flex-start;
+}
+
+.queueToggleButton {
+  white-space: nowrap;
+}
+
+.queueSearchField {
+  gap: 0.4rem;
+}
+
+.workflowList {
+  display: grid;
+  gap: 0.85rem;
+  max-height: calc(100vh - 19rem);
+  overflow-y: auto;
+  padding-right: 0.35rem;
+}
+
+.workflowListItem {
+  width: 100%;
+  display: grid;
+  gap: 0.35rem;
+  text-align: left;
+  background: #f8fbfd;
+  color: #10243e;
+  border: 1px solid #d7e4eb;
+}
+
+.workflowListItem.active {
+  border-color: #0b6a70;
+  box-shadow: 0 0 0 2px rgba(11, 106, 112, 0.12);
+}
+
+.workflowDetailCard {
+  max-height: calc(100vh - 11rem);
+  overflow-y: auto;
+  padding-right: 0.6rem;
+}
+
+.accountingPage {
+  padding-bottom: 2rem;
+}
+
+.adminMessengerShell {
+  min-height: calc(100vh - 11rem);
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 1.2rem;
+}
+
+.adminMessengerSidebar,
+.adminMessengerWorkspace {
+  min-height: calc(100vh - 11rem);
+  border-radius: 28px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 18px 40px rgba(16, 36, 62, 0.08);
+}
+
+.adminMessengerSidebar {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+}
+
+.adminMessengerSidebarHeader,
+.adminMessengerSearch,
+.adminMessengerList,
+.adminMessengerWorkspace {
+  padding: 1.2rem;
+}
+
+.adminMessengerSearch input {
+  border-radius: 999px;
+  background: #eff4f8;
+}
+
+.adminMessengerList {
+  display: grid;
+  gap: 0;
+  overflow-y: auto;
+}
+
+.adminMessengerListItem {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.85rem;
+  align-items: center;
+  text-align: left;
+  background: transparent;
+  color: #10243e;
+  border: none;
+  border-bottom: 1px solid #e3edf2;
+  padding: 1rem 0.25rem;
+  border-radius: 0;
+}
+
+.adminMessengerListItem.active {
+  background: rgba(11, 106, 112, 0.08);
+}
+
+.adminMessengerAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0b6a70 0%, #1c7f86 100%);
+  color: white;
+  font-weight: 700;
+}
+
+.adminMessengerAvatar.large {
+  width: 56px;
+  height: 56px;
+}
+
+.adminMessengerListCopy {
+  min-width: 0;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.adminMessengerListCopy strong,
+.adminMessengerListCopy span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adminMessengerListCopy span,
+.adminMessengerListMeta,
+.adminMessengerHeaderMeta span {
+  color: #5b7085;
+}
+
+.adminMessengerWorkspace {
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  gap: 1rem;
+}
+
+.adminMessengerHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e3edf2;
+}
+
+.adminMessengerHeaderIdentity {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.adminMessengerHeaderIdentity h3,
+.adminMessengerHeaderIdentity p,
+.adminMessengerEmptyState h3,
+.adminMessengerEmptyState p {
+  margin: 0;
+}
+
+.adminMessengerConversation {
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  gap: 0.8rem;
+  padding-right: 0.35rem;
+}
+
+.adminMessageRow {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.adminMessageRowOwn {
+  justify-content: flex-end;
+}
+
+.adminMessageBubble {
+  max-width: min(72%, 640px);
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.95rem 1rem;
+  border-radius: 22px 22px 22px 10px;
+  background: #eef4f7;
+  border: 1px solid #d7e4eb;
+}
+
+.adminMessageBubbleOwn {
+  background: linear-gradient(135deg, #0b6a70 0%, #1c7f86 100%);
+  color: white;
+  border-color: #0b6a70;
+  border-radius: 22px 22px 10px 22px;
+}
+
+.adminMessageMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+  font-size: 0.82rem;
+}
+
+.adminMessageMeta span {
+  opacity: 0.74;
+  white-space: nowrap;
+}
+
+.adminMessageBubble p {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.adminMessengerComposer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.6rem;
+  align-items: end;
+}
+
+.adminMessengerComposer textarea {
+  min-height: 78px;
+  resize: none;
+}
+
+.adminMessengerEmptyState {
+  min-height: 100%;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 0.6rem;
+  color: #5b7085;
+}
+
+.accountingGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.2rem;
+}
+
+.investorKpiBar .metricCard {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(243, 248, 252, 0.96) 100%);
+}
+
+.investorMapCard {
+  display: grid;
+  gap: 1rem;
+}
+
+.investorMapLayout {
+  display: grid;
+  grid-template-columns: minmax(300px, 1.2fr) minmax(260px, 0.9fr);
+  gap: 1.2rem;
+  align-items: stretch;
+}
+
+.investorMapFrame {
+  position: relative;
+  border-radius: 24px;
+  padding: 1rem;
+  background:
+    radial-gradient(circle at top right, rgba(240, 182, 76, 0.22), transparent 26%),
+    linear-gradient(180deg, #eef6f4 0%, #f9fbfd 100%);
+  border: 1px solid #d7e4eb;
+}
+
+.investorUgandaSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.investorMapOutline {
+  fill: rgba(255, 255, 255, 0.75);
+  stroke: #b7cad7;
+  stroke-width: 6;
+}
+
+.investorMapRegionGroup {
+  cursor: pointer;
+  outline: none;
+}
+
+.investorMapRegion {
+  stroke: rgba(11, 39, 52, 0.28);
+  stroke-width: 3;
+  transition: transform 140ms ease, opacity 140ms ease, stroke-width 140ms ease;
+}
+
+.investorMapRegionGroup:hover .investorMapRegion,
+.investorMapRegionGroup:focus .investorMapRegion,
+.investorMapRegion.active {
+  transform: translateY(-2px);
+  stroke-width: 5;
+}
+
+.investorMapRegion-low {
+  fill: #a8dfba;
+}
+
+.investorMapRegion-medium {
+  fill: #f6de86;
+}
+
+.investorMapRegion-high {
+  fill: #ef9d96;
+}
+
+.investorMapRegion.highRisk {
+  stroke: #d03a2f;
+  animation: investorRiskPulse 1.25s infinite;
+}
+
+.investorMapLabel {
+  font-size: 16px;
+  font-weight: 700;
+  fill: #173a63;
+  pointer-events: none;
+}
+
+.investorMapTooltip {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  padding: 1rem;
+  border-radius: 24px;
+  background: #f8fbfd;
+  border: 1px solid #d7e4eb;
+}
+
+.investorMapTooltipHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.investorMapTooltipHeader h4,
+.investorMapTooltipHeader p {
+  margin: 0;
+}
+
+.investorTooltipGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.investorRiskCallout {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fff1ef 0%, #fffaf9 100%);
+  border: 1px solid #efc9c2;
+  color: #812020;
+}
+
+.investorRiskCallout strong,
+.investorRiskCallout span {
+  margin: 0;
+}
+
+.investorRegionCard {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+  border-radius: 20px;
+  border: 1px solid #d7e4eb;
+  background: #f8fbfd;
+}
+
+.investorRegionCard p,
+.investorRegionCard strong {
+  margin: 0;
+}
+
+.investorRegionCard-low {
+  background: linear-gradient(135deg, #eef8f2 0%, #fbfefd 100%);
+  border-color: #cde8d7;
+}
+
+.investorRegionCard-medium {
+  background: linear-gradient(135deg, #fff7e8 0%, #fffdf7 100%);
+  border-color: #f1dfb3;
+}
+
+.investorRegionCard-high {
+  background: linear-gradient(135deg, #fff1ef 0%, #fffaf9 100%);
+  border-color: #efc9c2;
+}
+
+.accountingSection {
+  display: grid;
+  gap: 1rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sectionHeader h3,
+.sectionHeader p {
+  margin: 0;
+}
+
+.highlightValue {
+  font-size: 1.2rem;
+  color: #0b6a70;
+}
+
+.accountingLedger {
+  display: grid;
+  gap: 1rem;
+}
+
+.ledgerGroup {
+  display: grid;
+  gap: 0.65rem;
+  padding: 1rem;
+  border-radius: 18px;
+  background: #f7fafc;
+  border: 1px solid #dbe5ea;
+}
+
+.ledgerGroup h4 {
+  margin: 0;
+  color: #173a63;
+}
+
+.ledgerRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.ledgerRow span {
+  color: #49627c;
+}
+
+.ledgerTotal {
+  padding-top: 0.75rem;
+  margin-top: 0.2rem;
+  border-top: 1px solid #d7e4eb;
+}
+
+.miniMetricsGrid,
+.segmentGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.9rem;
+}
+
+.miniMetric,
+.segmentCard {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border-radius: 18px;
+  background: #f8fbfd;
+  border: 1px solid #d7e4eb;
+}
+
+.miniMetric span,
+.segmentCard span {
+  color: #49627c;
+}
+
+.miniMetric strong,
+.segmentCard strong {
+  font-size: 1.25rem;
+  color: #173a63;
+}
+
+.criticalMetric {
+  background: linear-gradient(135deg, #fff3ef 0%, #fff9f6 100%);
+  border-color: #f0d5c9;
+}
+
+.trendBars {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.trendRow {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.trendMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.trendMeta span {
+  color: #49627c;
+}
+
+.trendTrack {
+  width: 100%;
+  height: 12px;
+  border-radius: 999px;
+  background: #e5edf2;
+  overflow: hidden;
+}
+
+.trendFill {
+  height: 100%;
+  border-radius: inherit;
+}
+
+.tealFill {
+  background: linear-gradient(90deg, #0b6a70 0%, #1e8d95 100%);
+}
+
+.goldFill {
+  background: linear-gradient(90deg, #c59018 0%, #f0c24c 100%);
+}
+
+.goodSegment {
+  background: linear-gradient(135deg, #eef8f2 0%, #f9fcfa 100%);
+  border-color: #cde8d7;
+}
+
+.averageSegment {
+  background: linear-gradient(135deg, #fff7e8 0%, #fffdf7 100%);
+  border-color: #f1dfb3;
+}
+
+.riskySegment {
+  background: linear-gradient(135deg, #fff1ef 0%, #fffaf9 100%);
+  border-color: #efc9c2;
+}
+
+.submittedFormPanel {
+  display: grid;
+  gap: 1rem;
+}
+
+.collapsiblePanel {
+  align-content: start;
+}
+
+.summaryPanel {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.summaryPanelContent {
+  max-height: 340px;
+  overflow-y: auto;
+  padding-right: 0.35rem;
+}
+
+.workflowWorkspace {
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px dashed rgba(16, 36, 62, 0.15);
+  box-shadow: none;
+}
+
+.workflowWorkspaceEmpty {
+  min-height: calc(100vh - 15rem);
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 0.6rem;
+  padding: 1rem;
+}
+
+.workflowWorkspaceEmpty h2,
+.workflowWorkspaceEmpty p {
+  margin: 0;
+}
+
+.workflowSplit {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.detailGrid {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.detailGridRow {
+  display: grid;
+  gap: 0.25rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid #e3edf2;
+}
+
+.detailLabel {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6a7f92;
+}
+
+.detailValue {
+  color: #10243e;
+  word-break: break-word;
+}
+
+.drawerContent {
+  overflow-y: auto;
+  display: grid;
+  gap: 1rem;
+  padding-right: 0.35rem;
+}
+
+.drawerSection {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.formReplicaBanner {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem 1.1rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #eef5fb 0%, #f8fbfd 100%);
+  border: 1px solid #d7e4eb;
+}
+
+.formReplicaBanner h4,
+.formReplicaBanner p {
+  margin: 0;
+}
+
+.imageGallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.85rem;
+}
+
+.imageThumb {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.75rem;
+  background: #f8fbfd;
+  color: #10243e;
+  border: 1px solid #d7e4eb;
+  text-align: left;
+}
+
+.imageThumb img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.imageThumb.empty {
+  min-height: 160px;
+  align-content: center;
+}
+
+.fileChip {
+  display: grid;
+  align-content: center;
+  min-height: 80px;
+  padding: 0.75rem;
+  border-radius: 14px;
+  border: 1px solid #d7e4eb;
+  background: #f8fbfd;
+}
+
+.submittedFinancials {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e3edf2;
+}
+
+.submittedFinancialsHeader {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.submittedFinancialsHeader strong,
+.submittedFinancialsHeader span {
+  margin: 0;
+}
+
+.submittedFinancialsHeader span {
+  color: #6a7f92;
+}
+
+.borrowerShell {
+  padding: 0;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.borrowerTopNav {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  background: rgba(14, 39, 52, 0.96);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.borrowerTopNavInner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 54px;
+  padding: 0 1rem;
+}
+
+.borrowerTopNavButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.borrowerTopNavButton.active {
+  color: white;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.borrowerTopNavLogout {
+  margin-left: auto;
+  min-height: 36px;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: white;
+}
+
+.borrowerHero {
+  grid-template-columns: 1fr;
+  justify-content: stretch;
+  gap: 0;
+  min-height: calc(100vh - 54px);
+}
+
+.borrowerWorkspaceLayout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 0;
+  align-items: stretch;
+  min-height: calc(100vh - 54px);
+}
+
+.borrowerWorkspaceLayoutSingle {
+  grid-template-columns: 1fr;
+}
+
+.borrowerSidePanel {
+  padding: 1.1rem;
+  position: relative;
+  top: auto;
+  min-height: calc(100vh - 54px);
+  max-height: calc(100vh - 54px);
+  overflow-y: auto;
+  border-radius: 0;
+  box-shadow: 8px 0 28px rgba(16, 36, 62, 0.08);
+}
+
+.borrowerButtonList {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.borrowerNavButton {
+  width: 100%;
+  text-align: left;
+  display: grid;
+  gap: 0.3rem;
+  background: #eef4f7;
+  color: #6a7f92;
+  border: 1px solid #d7e4eb;
+}
+
+.borrowerNavButton.active {
+  background: #0b6a70;
+  color: white;
+  border-color: #0b6a70;
+}
+
+.borrowerNavMeta {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.82;
+}
+
+.borrowerNavLabel {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.borrowerEmptyWorkspace {
+  min-height: calc(100vh - 54px);
+  max-height: calc(100vh - 54px);
+  display: grid;
+  align-content: start;
+  gap: 0.7rem;
+  padding: 1.5rem 1.75rem;
+  overflow-y: auto;
+  border-radius: 0;
+  box-shadow: none;
+  scrollbar-gutter: stable;
+}
+
+.borrowerWorkspaceScroll {
+  width: 100%;
+  max-height: calc(100vh - 54px - 3rem);
+  overflow-y: auto;
+  padding-right: 0.35rem;
+}
+
+.borrowerEmptyWorkspace h2,
+.borrowerEmptyWorkspace p {
+  margin: 0;
+}
+
+.borrowerHeroCard {
+  padding: 1.6rem;
+}
+
+.borrowerSummaryGrid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.borrowerMetric {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.borrowerMetric span,
+.borrowerMetric small {
+  color: #5b7085;
+}
+
+.borrowerMetric strong {
+  font-size: 1.2rem;
+}
+
+.borrowerOverviewScoreCard {
+  display: inline-grid;
+  justify-self: start;
+  min-width: 220px;
+  padding: 1.1rem 1.25rem;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #0b6a70 0%, #1c7f86 100%);
+  color: white;
+  box-shadow: 0 18px 36px rgba(11, 106, 112, 0.18);
+}
+
+.borrowerOverviewScoreCard h3,
+.borrowerOverviewScoreCard p {
+  margin: 0;
+}
+
+.borrowerOverviewScoreCard h3 {
+  font-size: 2.2rem;
+  line-height: 1;
+  margin-top: 0.35rem;
+}
+
+.borrowerOverviewScoreCard .eyebrow,
+.borrowerOverviewScoreCard .headerMeta {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.borrowerSectionCard {
+  padding: 1.1rem 1.2rem 1.25rem;
+}
+
+.borrowerDetailGrid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.progressBlock {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.progressTrack {
+  width: 100%;
+  height: 12px;
+  border-radius: 999px;
+  background: #dfe9ef;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #0b6a70 0%, #22a58d 100%);
+}
+
+.borrowerScoreCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #eef6f8 0%, #f9fbfd 100%);
+  border: 1px solid #d7e4eb;
+}
+
+.borrowerScoreValue {
+  font-size: 2.4rem;
+  line-height: 1;
+  color: #0b6a70;
+}
+
+.borrowerScoreLabel {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.eligibilityPanel {
+  display: grid;
+  gap: 0.7rem;
+  padding: 1rem 1.1rem;
+  border-radius: 18px;
+  background: rgba(248, 251, 253, 0.96);
+  border: 1px solid #d7e4eb;
+}
+
+.documentButton {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: left;
+}
+
+.messageCard {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.95rem 1rem;
+  border-radius: 16px;
+  background: #f8fbfd;
+  border: 1px solid #d7e4eb;
+}
+
+.messageCard p {
+  margin: 0;
+}
+
+.messagingWorkspace {
+  min-height: 100%;
+}
+
+.conversationHolder {
+  width: 100%;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 0.35rem;
+}
+
+.messageComposer {
+  display: grid;
+  width: 100%;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.45rem;
+  align-items: end;
+}
+
+.messageComposerInput {
+  min-height: 72px;
+  max-width: none;
+  resize: none;
+}
+
+.messageAttachButton {
+  min-height: 72px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  border-radius: 14px;
+  border: 1px solid #bfd0dc;
+  background: rgba(255, 255, 255, 0.88);
+  color: #49627c;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.messageAttachButton input {
+  display: none;
+}
+
+.messageAttachmentDrafts,
+.messageAttachmentList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.messageAttachmentDrafts {
+  margin-top: 0.75rem;
+}
+
+.messageAttachmentChip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(191, 208, 220, 0.9);
+  background: rgba(255, 255, 255, 0.9);
+  color: #173a63;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.messageAttachmentChip.draft {
+  background: #eef4f7;
+}
+
+.messageBubbleOwn .messageAttachmentChip {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: white;
+}
+
+.messageThread {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.messageBubbleRow {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.messageBubbleRowOwn {
+  justify-content: flex-end;
+}
+
+.messageBubble {
+  max-width: min(78%, 620px);
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.85rem 1rem;
+  border-radius: 20px 20px 20px 8px;
+  background: #eef4f7;
+  border: 1px solid #d7e4eb;
+  color: #10243e;
+}
+
+.messageBubbleOwn {
+  background: linear-gradient(135deg, #0b6a70 0%, #1c7f86 100%);
+  border-color: #0b6a70;
+  color: white;
+  border-radius: 20px 20px 8px 20px;
+}
+
+.messageBubbleMeta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.85rem;
+}
+
+.messageBubbleMeta span {
+  opacity: 0.72;
+  white-space: nowrap;
+}
+
+.messageBubble p {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.repaymentHistoryToggle {
+  background: #d9ecfb;
+  color: #173a63;
+  border: 1px solid #bddbf2;
+}
+
+.repaymentHistoryHolder {
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 0.35rem 0.35rem 0 0;
+  border-radius: 18px;
+}
+
+.profilePlaceholder {
+  border: 1px solid #d7e4eb;
+  border-radius: 20px;
+  background: rgba(248, 251, 253, 0.96);
+  padding: 1rem;
+}
+
+.profilePlaceholderScroll {
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 0.35rem;
+}
+
+.onboardingProgress {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.onboardingProgressStep {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 1rem;
+  border-radius: 18px;
+  background: #eef4f7;
+  border: 1px solid #d7e4eb;
+  color: #5b7085;
+}
+
+.onboardingProgressStep span {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #d7e4eb;
+  font-weight: 700;
+}
+
+.onboardingProgressStep.active {
+  border-color: #0b6a70;
+  color: #10243e;
+}
+
+.onboardingProgressStep.completed {
+  background: #e9f7ef;
+  border-color: #bfe1ca;
+  color: #155534;
+}
+
+.simpleList {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.simpleList li + li {
+  margin-top: 0.45rem;
+}
+
+.imageOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 39, 52, 0.82);
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  z-index: 30;
+}
+
+.imageOverlayCard {
+  width: min(960px, 100%);
+  background: #fff;
+  border-radius: 24px;
+  padding: 1rem;
+  display: grid;
+  gap: 0.85rem;
+  position: relative;
+}
+
+.sessionTimeoutCard {
+  width: min(520px, 100%);
+  padding: 1.4rem;
+}
+
+.sessionTimeoutCard h2,
+.sessionTimeoutCard p {
+  margin: 0;
+}
+
+.imageOverlayCard img {
+  width: 100%;
+  max-height: 75vh;
+  object-fit: contain;
+  border-radius: 18px;
+  background: #f3f7fa;
+}
+
+.imageOverlayClose {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  padding: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e3edf2;
+}
+
+@keyframes investorRiskPulse {
+  0%, 100% {
+    stroke-opacity: 1;
+  }
+  50% {
+    stroke-opacity: 0.35;
+  }
+}
+
+@media (max-width: 980px) {
+  .shell,
+  .splitGrid,
+  .kanban,
+  .publicHero,
+  .workflowLayout,
+  .adminMessengerShell,
+  .workflowSplit,
+  .authPortalShell,
+  .investorMapLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    align-items: stretch;
+    padding: 1rem 1.25rem;
+  }
+
+  .topNav {
+    width: 100%;
+  }
+
+  .topbarUserCard {
+    width: 100%;
+    grid-auto-flow: row;
+    justify-items: start;
+  }
+
+  .workflowDetailCard {
+    max-height: none;
+    overflow: visible;
+    padding-right: 1.4rem;
+  }
+
+  .workflowRail,
+  .workflowWorkspace {
+    min-height: auto;
+    position: static;
+  }
+
+  .adminMessengerSidebar,
+  .adminMessengerWorkspace {
+    min-height: auto;
+  }
+
+  .adminMessengerWorkspace {
+    grid-template-rows: auto minmax(260px, 1fr) auto auto;
+  }
+
+  .adminMessengerComposer {
+    grid-template-columns: 1fr;
+  }
+
+  .borrowerWorkspaceLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .borrowerSidePanel,
+  .borrowerEmptyWorkspace,
+  .borrowerWorkspaceScroll {
+    min-height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .messageComposer {
+    grid-template-columns: 1fr;
+  }
+
+  .messageComposerInput {
+    max-width: none;
+  }
+
+  .onboardingProgress {
+    grid-template-columns: 1fr;
+  }
+
+  .statusQueuePanelOverlay {
+    position: static;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    max-height: none;
+  }
+
+  .publicSubmissionPane {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .authPortalIntro,
+  .authPortalForm {
+    padding: 1.4rem;
+  }
+
+  .investorTooltipGrid {
+    grid-template-columns: 1fr;
+  }
+}
+.geoDashboardShell {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr) 280px;
+  gap: 1rem;
+  align-items: start;
+}
+
+.geoSidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.geoMapCard {
+  min-height: 720px;
+}
+
+.geoMapCanvas {
+  width: 100%;
+  min-height: 640px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(24, 49, 58, 0.08);
+}
+
+.fieldLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+  color: #37505a;
+}
+
+.fieldLabel select {
+  min-height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(35, 60, 70, 0.18);
+  padding: 0.65rem 0.75rem;
+  background: #fff;
+}
+
+.geoToggle {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #233c46;
+}
+
+.geoLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.8rem 0.9rem;
+  border-radius: 16px;
+  background: rgba(32, 67, 80, 0.05);
+}
+
+.legendRow {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+  color: #39525d;
+}
+
+.legendSwatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.legendSwatch-green {
+  background: #2f8f5b;
+}
+
+.legendSwatch-yellow {
+  background: #e0ad2f;
+}
+
+.legendSwatch-red {
+  background: #d14343;
+}
+
+.geoAgentMarkerWrap {
+  background: transparent;
+  border: 0;
+}
+
+.geoAgentMarker {
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 16px rgba(18, 45, 54, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.geoAgentMarker span {
+  width: 28%;
+  height: 28%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.liveBadge {
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(30, 126, 88, 0.12);
+  color: #1d6d4d;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.selectedTableRow {
+  background: rgba(23, 78, 96, 0.08);
+}
+
+.tableLinkButton {
+  border: 0;
+  background: transparent;
+  color: #0b5f84;
+  font: inherit;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.auditSnapshotPre {
+  margin: 0;
+  max-height: 320px;
+  overflow: auto;
+  padding: 0.9rem;
+  border-radius: 14px;
+  background: #102029;
+  color: #e7f0f4;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (max-width: 1200px) {
+  .geoDashboardShell {
+    grid-template-columns: 1fr;
+  }
+
+  .geoMapCard {
+    order: -1;
+  }
+}
+.liveStatusText {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  color: #5f6b7a;
+  font-size: 0.92rem;
+}
+
+.liveStatusDot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: #c97c2b;
+  box-shadow: 0 0 0 0 rgba(201, 124, 43, 0.35);
+}
+
+.liveStatusDot.connected {
+  background: #1f8b4c;
+  box-shadow: 0 0 0 0.35rem rgba(31, 139, 76, 0.14);
+}

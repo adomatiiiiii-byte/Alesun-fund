@@ -1,0 +1,709 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  APPLICANT
+  ADMIN
+  SUPER_ADMIN
+  CREDIT_OFFICER
+  FIELD_OFFICER
+  RISK_ADMIN
+  FINANCE_ADMIN
+  AGENT
+  INVESTOR
+}
+
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+  DISABLED
+}
+
+enum ApplicationStatus {
+  NEW
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum ApplicationSource {
+  PUBLIC
+  INTERNAL
+}
+
+enum LoanStatus {
+  ACTIVE
+  COMPLETED
+  DEFAULTED
+}
+
+enum LoanOutcome {
+  PERFECT
+  LATE
+  DEFAULT
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  PAID_LATE
+  LATE
+  DEFAULTED
+}
+
+enum RepaymentScheduleStatus {
+  PENDING
+  PARTIAL
+  PAID
+}
+
+enum LoanRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  DELETED
+  ARCHIVED
+  CANCELLED
+  TEST
+}
+
+enum VerificationReviewStatus {
+  INCOMPLETE
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum AgentApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum AgentStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum AgentTransactionType {
+  SIGNUP_REWARD
+  LOAN_COMMISSION
+  PENALTY
+  WITHDRAWAL
+}
+
+enum AgentWalletBucket {
+  PENDING
+  AVAILABLE
+}
+
+enum DistrictKind {
+  DISTRICT
+  CITY
+}
+
+enum AdministrativeUnitType {
+  COUNTY
+  MUNICIPALITY
+  DIVISION
+}
+
+enum SubUnitType {
+  SUBCOUNTY
+  TOWN_COUNCIL
+  DIVISION
+  REFUGEE_SETTLEMENT
+  SPECIAL_AREA
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  CRITICAL
+}
+
+enum ReconciliationStatus {
+  PASS
+  FAIL
+}
+
+enum PasswordResetAccountType {
+  USER
+  BACKOFFICE
+}
+
+model User {
+  id                   String              @id @default(uuid())
+  fullName             String
+  email                String              @unique
+  loginId              String?             @unique
+  passwordHash         String
+  role                 Role
+  isActive             Boolean             @default(true)
+  status               AccountStatus       @default(ACTIVE)
+  assignedAgentId      String?
+  agentReferralId      String?
+  country              String              @default("UGANDA")
+  region               String              @default("UNASSIGNED")
+  subregion            String              @default("UNASSIGNED")
+  district             String              @default("UNASSIGNED")
+  administrativeUnit   String              @default("")
+  subUnit              String              @default("")
+  county               String              @default("UNASSIGNED")
+  subcounty            String              @default("UNASSIGNED")
+  village              String              @default("")
+  gpsLatitude          Decimal?            @db.Decimal(10, 7)
+  gpsLongitude         Decimal?            @db.Decimal(10, 7)
+  score                Int                 @default(100)
+  maxLoanLimit         Decimal             @default(100000) @db.Decimal(14, 2)
+  totalLoansTaken      Int                 @default(0)
+  totalLoansCompleted  Int                 @default(0)
+  lastLoanStatus       LoanOutcome?
+  applications         LoanApplication[]   @relation("submittedApplications")
+  assignedApplications LoanApplication[]   @relation("assignedFieldOfficer")
+  verificationReports  VerificationReport[]
+  auditLogs            AuditLog[]
+  loanRequests         LoanRequest[]
+  loans                Loan[]
+  userProfile          UserProfile?
+  businessProfile      Business?            @relation("ownedBusiness")
+  documents            Document?
+  verificationStatus   VerificationStatus?
+  agentApplication     AgentApplication?
+  agentProfile         Agent?
+  assignedAgent        Agent?              @relation("assignedAgentUsers", fields: [assignedAgentId], references: [id])
+  createdAgents        Agent[]             @relation("agentCreatorAdmin")
+  referral             Referral?
+  investorProfile      Investor?
+  createdInvestorAccounts Investor[]       @relation("investorCreatorAdmin")
+  passwordResetTokens  PasswordResetToken[]
+  lastLoginAt          DateTime?
+  mustChangePassword   Boolean             @default(false)
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+}
+
+model Business {
+  id                    String            @id @default(uuid())
+  userId                String?           @unique
+  name                  String
+  industry              String
+  location              String            @default("")
+  yearsInOperation      Decimal           @db.Decimal(6, 2)
+  weeklyRevenue         Decimal?          @db.Decimal(14, 2)
+  weeklyExpenses        Decimal?          @db.Decimal(14, 2)
+  ownerName             String
+  ownerPhone            String
+  idNumber              String            @default("")
+  ownerReliabilityScore Int
+  averageMonthlyRevenue Decimal           @db.Decimal(14, 2)
+  applications          LoanApplication[]
+  ownerUser             User?             @relation("ownedBusiness", fields: [userId], references: [id])
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+}
+
+model UserProfile {
+  id          String   @id @default(uuid())
+  userId       String   @unique
+  fullName     String
+  nin          String   @unique
+  dateOfBirth  DateTime
+  phone        String   @unique
+  email        String
+  address      String
+  position     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model Document {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  idFrontUrl        String
+  idBackUrl         String
+  tradingLicenseUrl String
+  submittedAt       DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id])
+}
+
+model VerificationStatus {
+  id             String                   @id @default(uuid())
+  userId         String                   @unique
+  status         VerificationReviewStatus @default(INCOMPLETE)
+  completedSteps Int                      @default(0)
+  submittedAt    DateTime?
+  reviewedAt     DateTime?
+  createdAt      DateTime                 @default(now())
+  updatedAt      DateTime                 @updatedAt
+  user           User                     @relation(fields: [userId], references: [id])
+}
+
+model LoanApplication {
+  id                  String               @id @default(uuid())
+  businessId          String
+  submittedById       String?
+  fieldOfficerId      String?
+  applicantName       String?
+  phoneNumber         String?
+  email               String?
+  source              ApplicationSource    @default(INTERNAL)
+  status              ApplicationStatus
+  monthlyRevenue      Json
+  monthlyExpenses     Json?
+  expenses            Decimal              @db.Decimal(14, 2)
+  financialInfo       Json
+  documentPaths       Json
+  screeningIssues     Json
+  fraudFlags          Json                 @default("[]")
+  decisionNotes       String?
+  passportPhotoUrl    String?
+  idFrontUrl          String?
+  idBackUrl           String?
+  termsAccepted       Boolean              @default(false)
+  termsAcceptedAt     DateTime?
+  paymentProofUrl     String?
+  hasPaidFee          Boolean              @default(false)
+  hasPaidFeeAt        DateTime?
+  loanRequestAmount   Decimal              @db.Decimal(14, 2)
+  loanPurpose         String
+  submittedAt         DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  business            Business             @relation(fields: [businessId], references: [id])
+  submittedBy         User?                @relation("submittedApplications", fields: [submittedById], references: [id])
+  fieldOfficer        User?                @relation("assignedFieldOfficer", fields: [fieldOfficerId], references: [id])
+  riskScore           RiskScore?
+  verificationReports VerificationReport[]
+  loan                Loan?
+}
+
+model RiskScore {
+  id             String          @id @default(uuid())
+  applicationId  String          @unique
+  score          Decimal         @db.Decimal(5, 2)
+  label          String
+  recommendation String
+  breakdown      Json
+  createdAt      DateTime        @default(now())
+  application    LoanApplication @relation(fields: [applicationId], references: [id])
+}
+
+model Loan {
+  id                 String          @id @default(uuid())
+  applicationId      String          @unique
+  userId             String?
+  agentId            String?
+  country            String          @default("UGANDA")
+  region             String          @default("UNASSIGNED")
+  subregion          String          @default("UNASSIGNED")
+  district           String          @default("UNASSIGNED")
+  administrativeUnit String          @default("")
+  subUnit            String          @default("")
+  county             String          @default("UNASSIGNED")
+  subcounty          String          @default("UNASSIGNED")
+  geoSnapshot        Json            @default("{}")
+  principal          Decimal         @db.Decimal(14, 2)
+  principalAmount    Decimal         @default(0) @db.Decimal(14, 2)
+  processingFee      Decimal         @default(0) @db.Decimal(14, 2)
+  disbursedAmount    Decimal         @default(0) @db.Decimal(14, 2)
+  interestAmount     Decimal         @default(0) @db.Decimal(14, 2)
+  totalRepayableAmount Decimal       @default(0) @db.Decimal(14, 2)
+  loanTerm           String          @default("1 month")
+  remainingBalance   Decimal         @default(0) @db.Decimal(14, 2)
+  annualInterestRate Decimal         @db.Decimal(5, 2)
+  termMonths         Int
+  startDate          DateTime?
+  dueDate            DateTime?
+  fullyPaid          Boolean         @default(false)
+  daysLate           Int             @default(0)
+  status             LoanStatus
+  disbursedAt        DateTime?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  application        LoanApplication @relation(fields: [applicationId], references: [id])
+  user               User?           @relation(fields: [userId], references: [id])
+  agent              Agent?          @relation(fields: [agentId], references: [id])
+  payments           Payment[]
+  repaymentSchedules RepaymentSchedule[]
+  loanRepayments     LoanRepayment[]
+}
+
+model Payment {
+  id                String        @id @default(uuid())
+  loanId            String
+  agentId           String?
+  country           String        @default("UGANDA")
+  region            String        @default("UNASSIGNED")
+  subregion         String        @default("UNASSIGNED")
+  district          String        @default("UNASSIGNED")
+  administrativeUnit String       @default("")
+  subUnit           String        @default("")
+  installmentNumber Int
+  dueDate           DateTime
+  amountDue         Decimal       @db.Decimal(14, 2)
+  amountPaid        Decimal?      @db.Decimal(14, 2)
+  paidDate          DateTime?
+  status            PaymentStatus
+  lateDays          Int           @default(0)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  loan              Loan          @relation(fields: [loanId], references: [id])
+}
+
+model LoanRepayment {
+  id          String              @id @default(uuid())
+  loanId       String
+  agentId      String?
+  country      String              @default("UGANDA")
+  region       String              @default("UNASSIGNED")
+  subregion    String              @default("UNASSIGNED")
+  district     String              @default("UNASSIGNED")
+  administrativeUnit String        @default("")
+  subUnit      String              @default("")
+  amount      Decimal             @db.Decimal(14, 2)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  loan        Loan                @relation(fields: [loanId], references: [id])
+  allocations PaymentAllocation[]
+}
+
+model RepaymentSchedule {
+  id             String                  @id @default(uuid())
+  loanId         String
+  dueDate        DateTime
+  expectedAmount Decimal                 @db.Decimal(14, 2)
+  paidAmount     Decimal                 @default(0) @db.Decimal(14, 2)
+  status         RepaymentScheduleStatus @default(PENDING)
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+  loan           Loan                    @relation(fields: [loanId], references: [id])
+  allocations    PaymentAllocation[]
+}
+
+model PaymentAllocation {
+  id              String            @id @default(uuid())
+  repaymentId     String
+  scheduleId      String
+  amountAllocated Decimal           @db.Decimal(14, 2)
+  createdAt       DateTime          @default(now())
+  repayment       LoanRepayment     @relation(fields: [repaymentId], references: [id])
+  schedule        RepaymentSchedule @relation(fields: [scheduleId], references: [id])
+}
+
+model VerificationReport {
+  id                       String          @id @default(uuid())
+  applicationId            String
+  officerId                String
+  businessExists           Boolean
+  stockMatchesClaims       Boolean
+  customerActivityVerified Boolean
+  ownerInterviewNotes      String
+  attachments              Json
+  createdAt                DateTime        @default(now())
+  updatedAt                DateTime        @updatedAt
+  application              LoanApplication @relation(fields: [applicationId], references: [id])
+  officer                  User            @relation(fields: [officerId], references: [id])
+}
+
+model AuditLog {
+  id            String   @id @default(uuid())
+  userId        String?
+  action        String
+  entityType    String
+  entityId      String
+  performedBy   String?
+  role          String?
+  previousValue Json?
+  newValue      Json?
+  metadata      Json?
+  ipAddress     String?
+  userAgent     String?
+  timestamp     DateTime @default(now())
+  createdAt     DateTime @default(now())
+  user          User?    @relation(fields: [userId], references: [id])
+}
+
+model SystemAlert {
+  id        String        @id @default(uuid())
+  type      String
+  severity  AlertSeverity
+  message   String
+  metadata  Json?
+  resolved  Boolean       @default(false)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model ReconciliationLog {
+  id                String               @id @default(uuid())
+  runDate           DateTime
+  totalLoansChecked Int
+  totalErrors       Int
+  errorDetails      Json
+  status            ReconciliationStatus
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+}
+
+model PasswordResetToken {
+  id          String                   @id @default(uuid())
+  accountType PasswordResetAccountType
+  accountId   String
+  tokenHash   String
+  expiresAt   DateTime
+  usedAt      DateTime?
+  metadata    Json?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime                 @default(now())
+  account     User                     @relation(fields: [accountId], references: [id])
+
+  @@index([accountId, accountType])
+}
+
+model LoanRequest {
+  id         String            @id @default(uuid())
+  userId      String
+  amount     Decimal           @db.Decimal(14, 2)
+  status     LoanRequestStatus @default(PENDING)
+  isTestData Boolean           @default(false)
+  referralId String?
+  agentId    String?
+  country    String            @default("UGANDA")
+  region     String            @default("UNASSIGNED")
+  subregion  String            @default("UNASSIGNED")
+  district   String            @default("UNASSIGNED")
+  administrativeUnit String    @default("")
+  subUnit    String            @default("")
+  county     String            @default("UNASSIGNED")
+  subcounty  String            @default("UNASSIGNED")
+  village    String            @default("")
+  geoSnapshot Json?
+  archivedAt DateTime?
+  deletedAt  DateTime?
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  user       User              @relation(fields: [userId], references: [id])
+  referral   Referral?         @relation(fields: [referralId], references: [id])
+  agent      Agent?            @relation(fields: [agentId], references: [id])
+}
+
+model AgentApplication {
+  id          String                 @id @default(uuid())
+  userId       String                 @unique
+  fullName    String
+  phoneNumber String
+  nationalId  String
+  kycDetails  Json
+  status      AgentApplicationStatus @default(PENDING)
+  adminNotes  String?
+  reviewedAt  DateTime?
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+  user        User                   @relation(fields: [userId], references: [id])
+  agent       Agent?
+}
+
+model Agent {
+  id                 String          @id @default(uuid())
+  userId             String          @unique
+  agentApplicationId String?         @unique
+  createdByAdminId   String
+  agentCode          String          @unique
+  fullName           String
+  phoneNumber        String
+  nationalId         String
+  country            String          @default("UGANDA")
+  region             String
+  subregion          String          @default("UNASSIGNED")
+  district           String
+  administrativeUnit String          @default("")
+  subUnit            String          @default("")
+  county             String
+  subcounty          String
+  activeUsersCount   Int             @default(0)
+  totalLoansHandled  Int             @default(0)
+  totalDisbursedAmount Decimal       @default(0) @db.Decimal(14, 2)
+  performanceScore   Int             @default(50)
+  status             AgentStatus     @default(ACTIVE)
+  approvedAt         DateTime        @default(now())
+  suspendedAt        DateTime?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  user               User            @relation(fields: [userId], references: [id])
+  createdByAdmin     User            @relation("agentCreatorAdmin", fields: [createdByAdminId], references: [id])
+  application        AgentApplication? @relation(fields: [agentApplicationId], references: [id])
+  assignedUsers      User[]          @relation("assignedAgentUsers")
+  referrals          Referral[]
+  loans              Loan[]
+  loanRequests       LoanRequest[]
+  wallet             AgentWallet?
+  transactions       AgentTransaction[]
+  score              AgentScore?
+  penalties          Penalty[]
+}
+
+model Investor {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  createdByAdminId String?
+  investorName     String
+  organization     String?
+  email            String?
+  phone            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User     @relation(fields: [userId], references: [id])
+  createdByAdmin   User?    @relation("investorCreatorAdmin", fields: [createdByAdminId], references: [id])
+}
+
+model Referral {
+  id         String        @id @default(uuid())
+  userId      String        @unique
+  agentId     String
+  createdAt  DateTime      @default(now())
+  user       User          @relation(fields: [userId], references: [id])
+  agent      Agent         @relation(fields: [agentId], references: [id])
+  loanRequests LoanRequest[]
+}
+
+model AgentWallet {
+  id               String   @id @default(uuid())
+  agentId          String   @unique
+  pendingBalance   Decimal  @default(0) @db.Decimal(14, 2)
+  availableBalance Decimal  @default(0) @db.Decimal(14, 2)
+  updatedAt        DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  agent            Agent    @relation(fields: [agentId], references: [id])
+}
+
+model AgentTransaction {
+  id          String               @id @default(uuid())
+  agentId      String
+  type        AgentTransactionType
+  bucket      AgentWalletBucket
+  amount      Decimal              @db.Decimal(14, 2)
+  description String
+  relatedLoanId String?
+  relatedUserId String?
+  metadata    Json?
+  createdAt   DateTime             @default(now())
+  agent       Agent                @relation(fields: [agentId], references: [id])
+}
+
+model AgentScore {
+  id               String   @id @default(uuid())
+  agentId          String   @unique
+  trustScore       Int      @default(50)
+  totalUsersReferred Int    @default(0)
+  defaultRate      Decimal  @default(0) @db.Decimal(5, 2)
+  repaymentRate    Decimal  @default(0) @db.Decimal(5, 2)
+  geographyFactor  Int      @default(50)
+  activityLevel    Int      @default(0)
+  activeLoans      Int      @default(0)
+  overdueLoans     Int      @default(0)
+  updatedAt        DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  agent            Agent    @relation(fields: [agentId], references: [id])
+}
+
+model Penalty {
+  id          String   @id @default(uuid())
+  agentId      String
+  amount      Decimal  @db.Decimal(14, 2)
+  reason      String
+  relatedLoanId String?
+  createdAt   DateTime @default(now())
+  agent       Agent    @relation(fields: [agentId], references: [id])
+}
+
+model Country {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  regions   Region[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Region {
+  id         String      @id @default(uuid())
+  countryId  String
+  name       String
+  country    Country     @relation(fields: [countryId], references: [id])
+  subregions Subregion[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@unique([countryId, name])
+}
+
+model Subregion {
+  id         String     @id @default(uuid())
+  regionId    String
+  name       String
+  region     Region     @relation(fields: [regionId], references: [id])
+  districts  District[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@unique([regionId, name])
+}
+
+model District {
+  id          String        @id @default(uuid())
+  subregionId String
+  name        String
+  type        DistrictKind
+  subregion   Subregion     @relation(fields: [subregionId], references: [id])
+  administrativeUnits AdministrativeUnit[]
+  subcounties Subcounty[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@unique([subregionId, name])
+}
+
+model AdministrativeUnit {
+  id         String                 @id @default(uuid())
+  districtId String
+  name       String
+  type       AdministrativeUnitType
+  district   District               @relation(fields: [districtId], references: [id])
+  subUnits   SubUnit[]
+  createdAt  DateTime               @default(now())
+  updatedAt  DateTime               @updatedAt
+
+  @@unique([districtId, name])
+}
+
+model SubUnit {
+  id                   String      @id @default(uuid())
+  administrativeUnitId String
+  name                 String
+  type                 SubUnitType
+  administrativeUnit   AdministrativeUnit @relation(fields: [administrativeUnitId], references: [id])
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+
+  @@unique([administrativeUnitId, name])
+}
+
+model Subcounty {
+  id         String   @id @default(uuid())
+  districtId String
+  name       String
+  district   District @relation(fields: [districtId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([districtId, name])
+}

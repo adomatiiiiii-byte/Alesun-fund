@@ -1,0 +1,22 @@
+{
+  "name": "alesun-fund-dashboard",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev:frontend": "npm --workspace frontend run dev",
+    "dev:backend": "npm --workspace backend run dev",
+    "build:frontend": "npm --workspace frontend run build",
+    "test:backend": "npm --workspace backend run test",
+    "test:stress": "node tests/runStressTests.js",
+    "cleanup:stale-loan-requests": "node scripts/cleanupStaleLoanRequests.js",
+    "cleanup:unassigned-agents:dry": "node scripts/deleteUsersWithoutAgents.js --dry-run",
+    "cleanup:unassigned-agents:execute": "node scripts/deleteUsersWithoutAgents.js --execute",
+    "fix:agent-auth": "node scripts/fixAgentAuthAccounts.js",
+    "db:generate": "npm --workspace backend run prisma:generate",
+    "db:push": "npm --workspace backend run prisma:push",
+    "db:seed": "npm --workspace backend run seed"
+  }
+}
